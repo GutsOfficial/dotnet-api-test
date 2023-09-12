@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+}
+<h1>@ViewData["Title"]</h1>
+
+<form method="get" id="testForm">
+    <button type="submit">Getir</button>
+
+</form>
+<p id="result" style="display:none;">Geldiiii</p>
+<p id="noresult" style="display:none;"></p>
+<div id="katilanlarDiv"></div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function Katilanlar() {
+        var html = [];
+        $.getJSON("https://gorest.co.in/public/v2/users", function (data) {
+            $.each(data, function (key, value) {
+                html.push("<label class='label label-success'>" + value.name + "</label>");
+            });
+            // HTML içeriğini diziye ekledikten sonra, div içine yerleştir
+            $("#katilanlarDiv").html(html.join(""));
+        });
+    }
+
+    $(document).ready(function () {
+        $("#testForm").submit(function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: "https://pokeapi.co/api/v2/pokemon/ditto",
+                type: "GET",
+                success: function (data) {
+
+                    // Sunucudan dönen veriyi işle
+                    $("#result").show().text(JSON.stringify(data));
+                    Katilanlar();
+                },
+                error: function (xhr, status, error) {
+                    // Hata durumunda sunucudan dönen mesajı "noresult" içine yazdır
+                    $("#noresult").show().text(xhr.responseText);
+                },
+            });
+        });
+    });
+
+
+
+</script>
